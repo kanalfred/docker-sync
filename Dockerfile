@@ -8,18 +8,12 @@
 # http://stackoverflow.com/questions/31644391/docker-centos-7-cron-not-working-in-local-machine
 #
 # Run:
-# docker run --name sync-test -v $PWD/dropboxHome:/root/.dropbox -d test/sync
+# docker run --name sync-test -v $PWD/dropboxHome:/root/.dropbox -v $PWD/sync:/root/Dropbox/backup -d test/sync
 # Build:
 # docker build -t kanalfred/fileserver .
 #
-# Create volume container:
-# [local]
-# docker create -v /home/alfred/workspace/docker/data/fileserver/mnt/storage:/mnt/storage --name data-fileserver centos:7
-# docker create -v /home/alfred/workspace/docker/data/fileserver/mnt/storage_bak:/mnt/storage_bak --name data-fileserver-bak centos:7
-# [coreos]
-# docker create -v /mnt/storage:/mnt/storage --name data-fileserver centos:7
-# docker create -v /mnt/storage_bak:/mnt/storage_bak --name data-fileserver-bak centos:7
-# docker create -v /mnt/other:/mnt/other --name data-other centos:7
+# Exclude dir
+# /config/exclude_sync_dir.sh
 #
 # Dependancy:
 # Centos 7
@@ -37,7 +31,7 @@ MAINTAINER Alfred Kan <kanalfred@gmail.com>
 # Add Files
 #/etc/cron.d
 ADD container-files/etc /etc 
-#ADD container-files/config /config 
+ADD container-files/config /config 
 
 RUN \
     yum -y install \
@@ -65,7 +59,8 @@ RUN \
 	#&& ln -s /root/.dropbox-dist/dropboxd /usr/local/bin/dropboxd \
 
 	# setup dropbox py
-    && wget -O /usr/local/bin//dropbox.py "http://www.dropbox.com/download?dl=packages/dropbox.py" \
+    && wget -O /usr/local/bin/dropbox.py "http://www.dropbox.com/download?dl=packages/dropbox.py" \
+    && chmod +x /usr/local/bin/dropbox.py \
 
 	# sync dir
 	&& mkdir -p /sync 
@@ -77,9 +72,3 @@ RUN yum clean all && rm -rf /tmp/yum*
 expose 17500
 
 #VOLUME ["/root/.dropbox", "/root/Dropbox"]
-
-# Run supervisord as demon with option -n 
-# supervisord already triggerd from base cetnos7 image
-#CMD dockerize /config/run.sh
-#CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
-
