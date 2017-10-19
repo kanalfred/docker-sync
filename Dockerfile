@@ -8,11 +8,15 @@
 # http://stackoverflow.com/questions/31644391/docker-centos-7-cron-not-working-in-local-machine
 #
 # Run:
+# docker run --name sync-test -v $PWD/dropboxHome:/root/.dropbox -v /data:/root/Dropbox/backup -d test/sync
 # docker run --name sync-test -v $PWD/dropboxHome:/root/.dropbox -v $PWD/sync:/root/Dropbox/backup -d test/sync
 # Build:
 # docker build -t kanalfred/fileserver .
 #
-# Exclude dir
+# Steps:
+# 1) Get link account url
+# supervisorctl tail -f dropboxd
+# 2) Exclude dir
 # /config/exclude_sync_dir.sh
 #
 # Dependancy:
