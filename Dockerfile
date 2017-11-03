@@ -57,17 +57,18 @@ RUN \
 	
 # install dropbox
 RUN \
-    mkdir -p /opt/dropbox \
-	&& cd /opt/dropbox && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - \
-	&& mv /opt/dropbox/.dropbox-dist /opt/dropbox/dropbox-dist \
+    #mkdir -p /opt/dropbox \
+	#&& cd /opt/dropbox && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - \
+	cd /root/ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - \
+	#&& mv /opt/dropbox/.dropbox-dist /opt/dropbox/dropbox-dist \
 	#&& ln -s /root/.dropbox-dist/dropboxd /usr/local/bin/dropboxd \
 
 	# setup dropbox py
     && wget -O /usr/local/bin/dropbox.py "http://www.dropbox.com/download?dl=packages/dropbox.py" \
-    && chmod +x /usr/local/bin/dropbox.py \
+    && chmod +x /usr/local/bin/dropbox.py
 
 	# sync dir
-	&& mkdir -p /sync 
+	#&& mkdir -p /sync 
 
 # Clean YUM caches to minimise Docker image size
 RUN yum clean all && rm -rf /tmp/yum*
