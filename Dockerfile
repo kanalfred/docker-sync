@@ -57,11 +57,7 @@ RUN \
 	
 # install dropbox
 RUN \
-    #mkdir -p /opt/dropbox \
-	#&& cd /opt/dropbox && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - \
 	cd /root/ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - \
-	#&& mv /opt/dropbox/.dropbox-dist /opt/dropbox/dropbox-dist \
-	#&& ln -s /root/.dropbox-dist/dropboxd /usr/local/bin/dropboxd \
 
 	# setup dropbox py
     && wget -O /usr/local/bin/dropbox.py "http://www.dropbox.com/download?dl=packages/dropbox.py" \
@@ -77,3 +73,7 @@ RUN yum clean all && rm -rf /tmp/yum*
 expose 17500
 
 #VOLUME ["/root/.dropbox", "/root/Dropbox"]
+# Run supervisord as demon with option -n 
+#CMD dockerize /config/run.sh
+CMD /root/.dropbox-dist/dropboxd
+
